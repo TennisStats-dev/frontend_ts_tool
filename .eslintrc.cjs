@@ -23,6 +23,7 @@ module.exports = {
         "@typescript-eslint/indent": "off",
         "no-tabs": 0,
         "comma-dangle": "off",
-        "@typescript-eslint/comma-dangle": "off"
+        "@typescript-eslint/comma-dangle": "off",
+        "multiline-ternary": "off",
     }
 }

@@ -1,7 +1,7 @@
-import type { IMatch, IPreMatch } from '../types/databaseTypes'
-import type { IMatchesGroupedByTournament } from '../types/types'
+import type { IMatch, IPreMatch } from '../../types/databaseTypes'
+import type { IMatchesGroupedByTournament } from '../../types/types'
 
-export const groupArrayBy = (
+export const groupMatchesByTournament = (
 	arrayInput: Array<IPreMatch | IMatch>,
 ): IMatchesGroupedByTournament[] => {
 	const groupedSchedule = new Map<number, Array<IPreMatch | IMatch>>()
@@ -19,9 +19,20 @@ export const groupArrayBy = (
 	}
 
 	const groupedScheduleArray = Array.from(groupedSchedule, ([key, value]) => ({
-		tournamentId: key,
+		id: key,
+		name: value[0].tournament.name,
 		matches: value,
 	}))
 
-	return groupedScheduleArray
+	const sortedArray = groupedScheduleArray.sort((a, b) => {
+		if (a.name < b.name) {
+			return -1
+		}
+		if (a.name > b.name) {
+			return 1
+		}
+		return 0
+	})
+
+	return sortedArray
 }

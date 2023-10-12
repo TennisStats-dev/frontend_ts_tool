@@ -6,6 +6,17 @@ export interface IDateRange {
 }
 
 export interface IMatchesGroupedByTournament {
-	tournamentId: number
+	id: number
+	name: string
 	matches: Array<IPreMatch | IMatch>
+}
+
+export interface ITournamentsGroupedByCircuit {
+	name: string
+	tournaments: IMatchesGroupedByTournament[]
+}
+
+export interface IMatchPlayersData {
+	home: IMatch[]
+	away: IMatch[]
 }

@@ -5,7 +5,7 @@ export const ToggleDarkMode = (): JSX.Element => {
 	useEffect(() => {
 		const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon')
 		const themeToggleLightIcon = document.getElementById(
-			'theme-toggle-light-icon'
+			'theme-toggle-light-icon',
 		)
 
 		// Change the icons inside the button based on previous settings
@@ -33,9 +33,6 @@ export const ToggleDarkMode = (): JSX.Element => {
 			if (themeToggleLightIcon !== null) {
 				themeToggleLightIcon.classList.toggle('hidden')
 			}
-
-			console.log(themeToggleDarkIcon)
-			console.log(themeToggleLightIcon)
 
 			// if set via local storage previously
 			if (localStorage.getItem('color-theme') !== null) {
