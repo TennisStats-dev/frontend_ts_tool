@@ -1,4 +1,4 @@
-import type { IMatch, IPreMatch } from './databaseTypes'
+import type { IMatchResponse, IPreMatchResponse } from './axiosResponse'
 
 export interface IDateRange {
 	from: Date
@@ -8,7 +8,7 @@ export interface IDateRange {
 export interface IMatchesGroupedByTournament {
 	id: number
 	name: string
-	matches: Array<IPreMatch | IMatch>
+	matches: Array<IPreMatchResponse | IMatchResponse>
 }
 
 export interface ITournamentsGroupedByCircuit {
@@ -16,40 +16,40 @@ export interface ITournamentsGroupedByCircuit {
 	tournaments: IMatchesGroupedByTournament[]
 }
 
-export interface IMatchPlayersData {
-	home: IMatch[]
-	away: IMatch[]
-}
-
 export interface IMatchPlayersStats {
 	home: IPlayerStats
 	away: IPlayerStats
-	h2h: IMatch[]
-	isFixed: boolean
+	h2h: IMatchResponse[]
+	isFixed?: boolean
 }
 
 export interface IPlayerStats {
 	tournament: IPeriodStats
 	year: IPeriodStats
 	all: IPeriodStats
-	lastMatches: IMatch[]
-	redFlag: IMatch[]
-	yellowFlag: IMatch[]
-	greenFlag: IMatch[]
-	VsSimilarRivals: {
-		won: IMatch[]
-		sample: IMatch[]
+	lastMatches: IMatchResponse[]
+	redFlag?: IMatchResponse[]
+	yellowFlag?: IMatchResponse[]
+	vsSimilarRivals?: {
+		won: IMatchResponse[]
+		sample: IMatchResponse[]
 	}
-	restTime: string
-	playsBothTypes: boolean
+	greenFlag?: IMatchResponse[]
+	restTime?: string
+	playsBothTypes?: IMatchResponse[]
 }
 
 export interface IPeriodStats {
-	matches: IMatch[]
+	matches: IMatchResponse[]
 	stats: {
-		victories: IMatch[]
-		acesAvg: number
-		dfAvg: number
-		gamesAvg: number
+		all: IStats
+		onSurface: IStats
 	}
+}
+
+export interface IStats {
+	victories: IMatchResponse[]
+	acesAvg: number
+	dfAvg: number
+	gamesAvg: number
 }

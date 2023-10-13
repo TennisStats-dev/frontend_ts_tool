@@ -1,47 +1,46 @@
-// import { useEffect, useState } from 'react'
-// import type { IMatch, IPreMatch } from '../../../types/databaseTypes'
-// import { api } from '../../../API'
-// import type { IMatchPlayersData } from '../../../types/types'
-// import { sortByDate } from '../../../services/match/sortByDate'
-// import { MatchCard } from './MatchCard'
+import { useEffect, useState } from 'react'
+import type { IMatchPlayersStats } from '../../../types/types'
+import {
+	getH2H,
+	getIsFixed,
+	getPlayerStats,
+} from '../../../services/stats/getPlayerStats'
+import type {
+	IMatchResponse,
+	IPreMatchResponse,
+} from '../../../types/axiosResponse'
 
-// interface Props {
-//     match: IMatch | IPreMatch
-// }
+interface Props {
+	match: IMatchResponse | IPreMatchResponse
+}
 
-// export const StatsCard = ({ match }: Props): JSX.Element => {
-// 	const [matches, setMatches] = useState<IMatchPlayersData>()
+export const StatsCard = ({ match }: Props): JSX.Element => {
+	const [matchData, setMatchData] = useState<IMatchPlayersStats>()
 
-// 	useEffect(() => {
-// 		const playersData = async (): Promise<IMatchPlayersData> => {
+	useEffect(() => {
+		const matchStats = async (): Promise<IMatchPlayersStats> => {
+			const home = await getPlayerStats(match, match.home)
+			const away = await getPlayerStats(match, match.away)
+			const h2h = getH2H(home.all.matches, match.away)
+			const isFixed = getIsFixed(match)
 
-// 		}
+			return {
+				home,
+				away,
+				h2h,
+				isFixed,
+			}
+		}
 
-// 		playersData()
-// 			.then((res) => {
-// 				setMatches(res)
-// 			})
-// 			.catch((err) => {
-// 				console.log(err)
-// 			})
-// 	}, [])
+		matchStats()
+			.then((res) => {
+				setMatchData(() => res)
+                console.log(matchData)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}, [])
 
-// 	return (
-// 		<section>
-// 			<div>
-// 				{matches?.home.splice(0, 5).map((match, index) => {
-// 					return (
-// 						<MatchCard key={match.api_id} match={match} index={index}></MatchCard>
-// 					)
-// 				})}
-// 			</div>
-// 			<div>
-// 				{matches?.away.splice(0, 5).map((match, index) => {
-// 					return (
-// 						<MatchCard key={match.api_id} match={match} index={index}></MatchCard>
-// 					)
-// 				})}
-// 			</div>
-// 		</section>
-// 	)
-// }
+	return <section></section>
+}

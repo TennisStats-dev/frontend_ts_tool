@@ -45,7 +45,6 @@ export const getDateRange = (
 
 export const getDateBeforeXDays = (date: Date, daysAgo: number): Date => {
 	const newTimeMs = date.getTime() - daysAgo * 24 * 60 * 60 * 1000
-
 	return msToDateTime(newTimeMs)
 }
 

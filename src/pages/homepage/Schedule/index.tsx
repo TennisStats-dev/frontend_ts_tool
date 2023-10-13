@@ -12,7 +12,7 @@ import utr from '../../../assets/utr.png'
 import wta from '../../../assets/wta.jpg'
 import { groupTournamentsByCircuit } from '../../../services/match/groupTournamentsByCircuit'
 import { CircuitCard } from './CircuitCard'
-import { sortByDate } from '../../../services/match/sortByDate'
+import { sortScheduleByDate } from '../../../services/match/sortByDate'
 
 export const Schedule = (): JSX.Element => {
 	// const [dayToSearch, setDayToSearch] = useState(0)
@@ -22,7 +22,7 @@ export const Schedule = (): JSX.Element => {
 		const scheduleData = async (): Promise<ITournamentsGroupedByCircuit[]> => {
 			const matches = await api.services.getDateSchedule(0)
 
-			const sortedByDate = sortByDate(matches)
+			const sortedByDate = sortScheduleByDate(matches)
 			const groupedByTournament = groupMatchesByTournament(sortedByDate)
 			const groupedByCircuit = groupTournamentsByCircuit(groupedByTournament)
 			return groupedByCircuit

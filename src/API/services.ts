@@ -38,7 +38,7 @@ const getPeriodPlayerMatches = async (
 		const date = new Date()
 		const dateRange = getDateRange(date, yearsAgo, monthsAgo)
 
-		const response = await axios.get<IMatchResponse[]>(
+		const response = await axios.get<IAxiosResponse<IMatchResponse[]>>(
 			'http://localhost:5000/player-stats-range',
 			{
 				params: {
@@ -53,7 +53,7 @@ const getPeriodPlayerMatches = async (
 
 		console.log(response)
 
-		const playerEndedMatches = response.data
+		const playerEndedMatches = response.data.result
 
 		console.log(playerEndedMatches)
 
@@ -63,11 +63,12 @@ const getPeriodPlayerMatches = async (
 		throw new Error('Error getting a day match schedule')
 	}
 }
+
 const getAllPlayerMatches = async (
 	playerApiId: number,
 ): Promise<IMatchResponse[]> => {
 	try {
-		const response = await axios.get<IMatchResponse[]>(
+		const response = await axios.get<IAxiosResponse<IMatchResponse[]>>(
 			'http://localhost:5000/player-stats',
 			{
 				params: {
@@ -76,7 +77,7 @@ const getAllPlayerMatches = async (
 			},
 		)
 
-		const playerEndedMatches = response.data
+		const playerEndedMatches = response.data.result
 
 		console.log(playerEndedMatches)
 

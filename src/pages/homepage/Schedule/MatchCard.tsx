@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { flagsObject } from '../../../constants/countries'
-import type { IMatch, IPreMatch } from '../../../types/databaseTypes'
+import type { IMatch } from '../../../types/databaseTypes'
 import { formatDate } from '../../../utils/formatDate'
-// import { StatsCard } from './StatsCard'
+import { StatsCard } from './StatsCard'
+import type {
+	IMatchResponse,
+	IPreMatchResponse,
+} from '../../../types/axiosResponse'
 
 interface Props {
-	match: IMatch | IPreMatch
+	match: IMatchResponse | IPreMatchResponse
 	index: number
 }
 
@@ -51,7 +55,7 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 						<div className="justify-self-center flex flex-col items-center">
 							<p>{date}</p>
 							<p>{match.court?.name}</p>
-                            <p>{match.api_id}</p>
+							<p>{match.api_id}</p>
 						</div>
 					)}
 
@@ -90,11 +94,7 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 					</svg>
 				</button>
 			</div>
-			{/* {displayStats && (
-				<StatsCard
-                match={match}
-				></StatsCard>
-			)} */}
+			{displayStats && <StatsCard match={match}></StatsCard>}
 		</li>
 	)
 }
