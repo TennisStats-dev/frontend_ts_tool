@@ -95,7 +95,7 @@ export interface IPreOdds {
 	}
 }
 
-export interface IPlayer {
+export interface IPlayer extends Document {
 	api_id: number
 	name: string
 	gender: Gender

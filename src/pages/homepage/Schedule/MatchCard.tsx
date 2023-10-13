@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { flagsObject } from '../../../constants/countries'
 import type { IMatch, IPreMatch } from '../../../types/databaseTypes'
 import { formatDate } from '../../../utils/formatDate'
-import { StatsCard } from './StatsCard'
+// import { StatsCard } from './StatsCard'
 
 interface Props {
 	match: IMatch | IPreMatch
@@ -90,12 +90,11 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 					</svg>
 				</button>
 			</div>
-			{displayStats && (
+			{/* {displayStats && (
 				<StatsCard
-					homeApiId={match.home.api_id}
-					awayApiId={match.away.api_id}
+                match={match}
 				></StatsCard>
-			)}
+			)} */}
 		</li>
 	)
 }

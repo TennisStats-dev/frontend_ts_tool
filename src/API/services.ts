@@ -1,23 +1,26 @@
 import axios from 'axios'
 import { getDateRange, getDayRange } from '../utils/getDates'
-import type { IMatch, IPreMatch } from '../types/databaseTypes'
+import type { IAxiosResponse, IMatchResponse, IPreMatchResponse } from '../types/axiosResponse'
 
 const getDateSchedule = async (
 	dayToSearch: number,
-): Promise<Array<IPreMatch | IMatch>> => {
+): Promise<Array<IPreMatchResponse | IMatchResponse>> => {
 	try {
 		const dateRange = getDayRange(dayToSearch)
 
-		const response = await axios.get('http://localhost:5000/today-schedule', {
-			params: {
-				dateRange: {
-					from: dateRange.from.toISOString(),
-					to: dateRange.to,
+		const response = await axios.get<IAxiosResponse<Array<IPreMatchResponse | IMatchResponse>>>(
+			'http://localhost:5000/today-schedule',
+			{
+				params: {
+					dateRange: {
+						from: dateRange.from.toISOString(),
+						to: dateRange.to,
+					},
 				},
 			},
-		})
+		)
 
-		const schedule: Array<IPreMatch | IMatch> = response.data.result
+		const schedule = response.data.result
 
 		return schedule
 	} catch (error) {
@@ -26,27 +29,54 @@ const getDateSchedule = async (
 	}
 }
 
-const getPeriodMatches = async (
+const getPeriodPlayerMatches = async (
 	playerApiId: number,
 	yearsAgo: number,
 	monthsAgo: number,
-): Promise<IMatch[]> => {
+): Promise<IMatchResponse[]> => {
 	try {
-		const dateRange = getDateRange(yearsAgo, monthsAgo)
+		const date = new Date()
+		const dateRange = getDateRange(date, yearsAgo, monthsAgo)
 
-		const response = await axios.get('http://localhost:5000/player-stats', {
-			params: {
-				dateRange: {
-					from: dateRange.from.toISOString(),
-					to: dateRange.to,
+		const response = await axios.get<IMatchResponse[]>(
+			'http://localhost:5000/player-stats-range',
+			{
+				params: {
+					dateRange: {
+						from: dateRange.from.toISOString(),
+						to: dateRange.to,
+					},
+					playerApiId,
 				},
-				playerApiId
 			},
-		})
+		)
 
 		console.log(response)
 
-		const playerEndedMatches: IMatch[] = response.data.endedMatches
+		const playerEndedMatches = response.data
+
+		console.log(playerEndedMatches)
+
+		return playerEndedMatches
+	} catch (error) {
+		console.log(error)
+		throw new Error('Error getting a day match schedule')
+	}
+}
+const getAllPlayerMatches = async (
+	playerApiId: number,
+): Promise<IMatchResponse[]> => {
+	try {
+		const response = await axios.get<IMatchResponse[]>(
+			'http://localhost:5000/player-stats',
+			{
+				params: {
+					playerApiId,
+				},
+			},
+		)
+
+		const playerEndedMatches = response.data
 
 		console.log(playerEndedMatches)
 
@@ -58,5 +88,6 @@ const getPeriodMatches = async (
 }
 export const API_SERVICES = {
 	getDateSchedule,
-	getPeriodMatches,
+	getPeriodPlayerMatches,
+	getAllPlayerMatches,
 }

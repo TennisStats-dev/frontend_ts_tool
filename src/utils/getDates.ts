@@ -19,9 +19,13 @@ export const getDayRange = (dayToSerch: number): IDateRange => {
 	}
 }
 
-export const getDateRange = (yearsAgo: number, monthsAgo: number): IDateRange => {
-	const to = new Date()
-	const from = new Date()
+export const getDateRange = (
+	date: Date,
+	yearsAgo: number,
+	monthsAgo: number,
+): IDateRange => {
+	const to = date
+	const from = date
 
 	if (yearsAgo > 0) {
 		const fromYear = to.getFullYear() - yearsAgo
@@ -35,6 +39,16 @@ export const getDateRange = (yearsAgo: number, monthsAgo: number): IDateRange =>
 
 	return {
 		from,
-		to
+		to,
 	}
+}
+
+export const getDateBeforeXDays = (date: Date, daysAgo: number): Date => {
+	const newTimeMs = date.getTime() - daysAgo * 24 * 60 * 60 * 1000
+
+	return msToDateTime(newTimeMs)
+}
+
+export const msToDateTime = (ms: number): Date => {
+	return new Date(Number(ms))
 }
