@@ -19,8 +19,11 @@ export const StatsCard = ({ match }: Props): JSX.Element => {
 
 	useEffect(() => {
 		const matchStats = async (): Promise<IMatchPlayersStats> => {
-			const home = await getPlayerStats(match, match.home)
-			const away = await getPlayerStats(match, match.away)
+            // const promises = [getPlayerStats(match, match.home), getPlayerStats(match, match.away)]
+            const res = await Promise.all([getPlayerStats(match, match.home), getPlayerStats(match, match.away)])
+
+            const home = res[0]
+            const away = res[1]
 			const h2h = getH2H(home.careerStats.all.victories.sample, match.away)
 			const isFixed = getIsFixed(match)
 

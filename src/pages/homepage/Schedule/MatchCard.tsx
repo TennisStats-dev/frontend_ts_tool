@@ -7,6 +7,7 @@ import type {
 	IMatchResponse,
 	IPreMatchResponse,
 } from '../../../types/axiosResponse'
+import worldFlag from '../../../assets/world.png'
 
 interface Props {
 	match: IMatchResponse | IPreMatchResponse
@@ -38,12 +39,20 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 				<div className="col-start-2 col-span-4 grid grid-cols-3">
 					<div className="flex gap-1 justify-self-end items-center">
 						<p>{match.home.name}</p>
-						{countryHome !== undefined && (
+						{countryHome !== undefined ? (
 							<img
 								className="h-7 w-7"
 								src={flagsObject[countryHome].image}
 								alt={`Flag from ${flagsObject[countryHome]}`}
 							></img>
+						) : (
+							<div className='w-7 h-7 px-0.5 flex items-center'>
+								<img
+									className="h-4 border border-black"
+									src={worldFlag}
+									alt={'Flag from the world'}
+								></img>
+							</div>
 						)}
 					</div>
 
@@ -73,7 +82,7 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 				</div>
 				<div className="justify-self-end pr-4 self-center">
 					<button
-                    className='p-2 hover:bg-primary-100 rounded-full'
+						className="p-2 hover:bg-primary-100 rounded-full"
 						onClick={() => {
 							setDisplayStats(!displayStats)
 						}}

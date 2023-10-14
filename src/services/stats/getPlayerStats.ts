@@ -8,13 +8,17 @@ import type {
 import type { Surface } from '../../types/databaseTypes'
 import type { IPlayerStats, IStats } from '../../types/types'
 import { getDateBeforeXDays, getDateRange } from '../../utils/getDates'
+import { msToStringTime } from '../../utils/msToStringTime'
 import { sortEndedMatchesByDate } from '../match/sortByDate'
 
 export const getPlayerStats = async (
 	matchData: IMatchResponse | IPreMatchResponse,
 	playerData: IPlayerResponse,
 ): Promise<IPlayerStats> => {
+	const startTime = new Date()
 	const allMatches = await api.services.getAllPlayerMatches(playerData.api_id)
+	const endTime = new Date()
+	console.log(msToStringTime(endTime.getTime() - startTime.getTime()))
 
 	const allMatchesSortedByDate = sortEndedMatchesByDate(allMatches)
 
@@ -99,6 +103,8 @@ const calculateStatsFromMatchArray = (
 		return match.match_stats.winner === playerData._id
 	})
 
+    const victoriesPercentage = victories.length > 0 ? Math.round((victories.length * 100) / matches.length) : 0
+
 	const acesArray: number[] = []
 	const dfArray: number[] = []
 	const gamesArray: number[] = []
@@ -135,38 +141,42 @@ const calculateStatsFromMatchArray = (
 		}
 	})
 
-	if (acesArray.length === 4) {
-		console.log('array de aces del torneo', acesArray)
-	}
-
 	const acesAvg =
-		Math.round(
-			(acesArray.reduce(
-				(accumulator, currentValue) => accumulator + currentValue,
-			) /
-				acesArray.length) *
-				10,
-		) / 10
+		acesArray.length === 0
+			? 0
+			: Math.round(
+					(acesArray.reduce(
+						(accumulator, currentValue) => accumulator + currentValue,
+					) /
+						acesArray.length) *
+						10,
+			) / 10
 	const dfAvg =
-		Math.round(
-			(dfArray.reduce((accumulator, currentValue) => accumulator + currentValue) /
-				dfArray.length) *
-				10,
-		) / 10
+		dfArray.length === 0
+			? 0
+			: Math.round(
+					(dfArray.reduce(
+						(accumulator, currentValue) => accumulator + currentValue,
+					) /
+						dfArray.length) *
+						10,
+			) / 10
 	const gamesAvg =
-		Math.round(
-			(gamesArray.reduce(
-				(accumulator, currentValue) => accumulator + currentValue,
-			) /
-				gamesArray.length) *
-				10,
-		) / 10
+		gamesArray.length === 0
+			? 0
+			: Math.round(
+					(gamesArray.reduce(
+						(accumulator, currentValue) => accumulator + currentValue,
+					) /
+						gamesArray.length) *
+						10,
+			) / 10
 
 	return {
 		victories: {
 			total: victories,
 			sample: matches,
-			percentage: Math.round((victories.length * 100) / matches.length),
+			percentage: victoriesPercentage,
 		},
 		aces: {
 			average: acesAvg,
