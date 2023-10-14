@@ -53,7 +53,7 @@ export interface ICourt {
 
 export interface IMatchStats {
 	result: string[] | 'home' | 'away' | 'cancelled' | 'Not updated'
-	winner: IPlayer | undefined
+	winner: string | undefined
 	aces?: [number, number]
 	df?: [number, number]
 	win_1st_serve?: [number, number]

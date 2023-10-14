@@ -24,9 +24,9 @@ export interface IMatchPlayersStats {
 }
 
 export interface IPlayerStats {
-	tournament: IPeriodStats
-	year: IPeriodStats
-	all: IPeriodStats
+	tournamentStats: Pick<IPeriodStats, 'all'>
+	yearStats: IPeriodStats
+	careerStats: IPeriodStats
 	lastMatches: IMatchResponse[]
 	redFlag?: IMatchResponse[]
 	yellowFlag?: IMatchResponse[]
@@ -40,16 +40,26 @@ export interface IPlayerStats {
 }
 
 export interface IPeriodStats {
-	matches: IMatchResponse[]
-	stats: {
-		all: IStats
-		onSurface: IStats
-	}
+	all: IStats
+	onSurface: IStats
 }
 
 export interface IStats {
-	victories: IMatchResponse[]
-	acesAvg: number
-	dfAvg: number
-	gamesAvg: number
+	victories: {
+		total: IMatchResponse[]
+		sample: IMatchResponse[]
+		percentage: number
+	}
+	aces: {
+		average: number
+		sample: number
+	}
+	df: {
+		average: number
+		sample: number
+	}
+	games: {
+		average: number
+		sample: number
+	}
 }

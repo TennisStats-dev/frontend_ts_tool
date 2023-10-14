@@ -32,7 +32,7 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 	return (
 		<li
 			key={index}
-			className="border border-solid border-sky-500 rounded mb-2 p-2"
+			className={`${index !== 0 ? 'border-t-2' : null} border-bg-slate-400 p-2`}
 		>
 			<div className="grid grid-cols-6">
 				<div className="col-start-2 col-span-4 grid grid-cols-3">
@@ -50,6 +50,7 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 					{result.score !== undefined && result.winner !== undefined ? (
 						<div className="justify-self-center">
 							<h1>{result.score}</h1>
+							<p>{match.api_id}</p>
 						</div>
 					) : (
 						<div className="justify-self-center flex flex-col items-center">
@@ -70,29 +71,31 @@ export const MatchCard = ({ match, index }: Props): JSX.Element => {
 						<p>{match.away.name}</p>
 					</div>
 				</div>
-				<button
-					className="justify-self-end p-3"
-					onClick={() => {
-						setDisplayStats(!displayStats)
-					}}
-				>
-					<svg
-						data-accordion-icon
-						className={`w-3 h-3 shrink-0 ${displayStats ? 'rotate-180' : null}`}
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 10 6"
+				<div className="justify-self-end pr-4 self-center">
+					<button
+                    className='p-2 hover:bg-primary-100 rounded-full'
+						onClick={() => {
+							setDisplayStats(!displayStats)
+						}}
 					>
-						<path
-							stroke="currentColor"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth="2"
-							d="M9 5 5 1 1 5"
-						/>
-					</svg>
-				</button>
+						<svg
+							data-accordion-icon
+							className={`w-3 h-3 shrink-0 ${displayStats ? 'rotate-180' : null}`}
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 10 6"
+						>
+							<path
+								stroke="currentColor"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M9 5 5 1 1 5"
+							/>
+						</svg>
+					</button>
+				</div>
 			</div>
 			{displayStats && <StatsCard match={match}></StatsCard>}
 		</li>

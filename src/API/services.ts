@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { getDateRange, getDayRange } from '../utils/getDates'
-import type { IAxiosResponse, IMatchResponse, IPreMatchResponse } from '../types/axiosResponse'
+import type {
+	IAxiosResponse,
+	IMatchResponse,
+	IPreMatchResponse,
+} from '../types/axiosResponse'
 
 const getDateSchedule = async (
 	dayToSearch: number,
@@ -8,17 +12,16 @@ const getDateSchedule = async (
 	try {
 		const dateRange = getDayRange(dayToSearch)
 
-		const response = await axios.get<IAxiosResponse<Array<IPreMatchResponse | IMatchResponse>>>(
-			'http://localhost:5000/today-schedule',
-			{
-				params: {
-					dateRange: {
-						from: dateRange.from.toISOString(),
-						to: dateRange.to,
-					},
+		const response = await axios.get<
+			IAxiosResponse<Array<IPreMatchResponse | IMatchResponse>>
+		>('http://localhost:5000/today-schedule', {
+			params: {
+				dateRange: {
+					from: dateRange.from.toISOString(),
+					to: dateRange.to,
 				},
 			},
-		)
+		})
 
 		const schedule = response.data.result
 
@@ -51,11 +54,7 @@ const getPeriodPlayerMatches = async (
 			},
 		)
 
-		console.log(response)
-
 		const playerEndedMatches = response.data.result
-
-		console.log(playerEndedMatches)
 
 		return playerEndedMatches
 	} catch (error) {
@@ -78,8 +77,6 @@ const getAllPlayerMatches = async (
 		)
 
 		const playerEndedMatches = response.data.result
-
-		console.log(playerEndedMatches)
 
 		return playerEndedMatches
 	} catch (error) {

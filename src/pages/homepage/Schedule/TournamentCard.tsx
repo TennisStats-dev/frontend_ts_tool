@@ -20,12 +20,13 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 	const location = tournament.matches[0].tournament.ground?.location
 
 	return (
-		<li
-			key={tournament.id}
-			className="border border-solid border-sky-500 rounded mb-2 p-2"
-		>
+		<li key={tournament.id} className="mt-2">
 			<article>
-				<header className="sticky top-14 flex justify-between rounded bg-slate-400">
+				<header
+					className={`sticky top-14 flex justify-between bg-slate-400 ${
+						displayMatches ? 'rounded-t' : 'rounded'
+					}`}
+				>
 					<div className="flex gap-2 items-center px-3">
 						<img
 							className="h-4"
@@ -45,7 +46,7 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 							<div className="flex items-center gap-2 px-3">
 								<div className="flex items-center">
 									<img className="h-3" src={tournamentSurfaceImage[surface]}></img>
-									<div className="w-1 px-3 flex justify-center">
+									<div className="px-3 flex justify-center">
 										<p>{tournamentLocation[location]}</p>
 									</div>
 								</div>
@@ -80,7 +81,11 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 					</div>
 				</header>
 				<main>
-					<ul className={`${!displayMatches ? 'hidden' : null}`}>
+					<ul
+						className={`${
+							!displayMatches ? 'hidden' : 'border-x-2 border-b-2 rounded-b'
+						}`}
+					>
 						{tournament.matches.map((match, index) => {
 							return <MatchCard key={index} match={match} index={index}></MatchCard>
 						})}

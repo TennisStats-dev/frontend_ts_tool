@@ -16,12 +16,12 @@ export const tournamentSurfaceImage = {
 }
 
 export const tournamentLocation = {
-    [grounds[api.constants.ground.clay].location]: 'O',
-	[grounds[api.constants.ground.grass].location]: 'O',
-	[grounds[api.constants.ground.hardOutdoor].location]: 'O',
-	[grounds[api.constants.ground.hardIndoor].location]: 'I',
-	[grounds[api.constants.ground.carpetOutdoor].location]: 'O',
-	[grounds[api.constants.ground.carpetIndoor].location]: 'I',
-	[grounds[api.constants.ground.syntheticOutdoor].location]: 'O',
-	[grounds[api.constants.ground.syntheticIndoor].location]: 'I',
+    [grounds[api.constants.ground.clay].location]: 'Outdoor',
+	[grounds[api.constants.ground.grass].location]: 'Outdoor',
+	[grounds[api.constants.ground.hardOutdoor].location]: 'Outdoor',
+	[grounds[api.constants.ground.hardIndoor].location]: 'Indoor',
+	[grounds[api.constants.ground.carpetOutdoor].location]: 'Outdoor',
+	[grounds[api.constants.ground.carpetIndoor].location]: 'Indoor',
+	[grounds[api.constants.ground.syntheticOutdoor].location]: 'Outdoor',
+	[grounds[api.constants.ground.syntheticIndoor].location]: 'Indoor',
 }

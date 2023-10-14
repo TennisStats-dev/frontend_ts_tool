@@ -16,8 +16,6 @@ export const getPlayerStats = async (
 ): Promise<IPlayerStats> => {
 	const allMatches = await api.services.getAllPlayerMatches(playerData.api_id)
 
-	console.log(allMatches[0].tournament)
-
 	const allMatchesSortedByDate = sortEndedMatchesByDate(allMatches)
 
 	const nonRetiredAllMatches = allMatchesSortedByDate.filter(
@@ -31,8 +29,6 @@ export const getPlayerStats = async (
 		return new Date(match.est_time) >= startingPeriod
 	})
 
-	console.log(yearMatches)
-
 	const tournamentMatches = yearMatches.filter((match) => {
 		const startingPeriod = getDateBeforeXDays(new Date(matchData.est_time), 15)
 
@@ -41,8 +37,6 @@ export const getPlayerStats = async (
 			new Date(match.est_time) >= startingPeriod
 		)
 	})
-
-	console.log(tournamentMatches)
 
 	const greenFlag = calculateTournamentAdditionalStats(
 		tournamentMatches,
@@ -65,38 +59,24 @@ export const getPlayerStats = async (
 	}
 
 	return {
-		tournament: {
-			matches: tournamentMatches,
-			stats: {
-				all: calculateStatsFromMatchArray(tournamentMatches, playerData),
-				onSurface: calculateStatsFromMatchArray(
-					tournamentMatches,
-					playerData,
-					matchData.tournament.ground?.surface,
-				),
-			},
+		tournamentStats: {
+			all: calculateStatsFromMatchArray(tournamentMatches, playerData),
 		},
-		year: {
-			matches: yearMatches,
-			stats: {
-				all: calculateStatsFromMatchArray(yearMatches, playerData),
-				onSurface: calculateStatsFromMatchArray(
-					yearMatches,
-					playerData,
-					matchData.tournament.ground?.surface,
-				),
-			},
+		yearStats: {
+			all: calculateStatsFromMatchArray(yearMatches, playerData),
+			onSurface: calculateStatsFromMatchArray(
+				yearMatches,
+				playerData,
+				matchData.tournament.ground?.surface,
+			),
 		},
-		all: {
-			matches: nonRetiredAllMatches,
-			stats: {
-				all: calculateStatsFromMatchArray(nonRetiredAllMatches, playerData),
-				onSurface: calculateStatsFromMatchArray(
-					nonRetiredAllMatches,
-					playerData,
-					matchData.tournament.ground?.surface,
-				),
-			},
+		careerStats: {
+			all: calculateStatsFromMatchArray(nonRetiredAllMatches, playerData),
+			onSurface: calculateStatsFromMatchArray(
+				nonRetiredAllMatches,
+				playerData,
+				matchData.tournament.ground?.surface,
+			),
 		},
 		lastMatches: allMatches.splice(-5),
 		...yearStats,
@@ -105,21 +85,19 @@ export const getPlayerStats = async (
 }
 
 const calculateStatsFromMatchArray = (
-	matchesInput: IMatchResponse[],
+	matches: IMatchResponse[],
 	playerData: IPlayerResponse,
 	surface?: Surface,
 ): IStats => {
-	let matches = matchesInput
-
 	if (surface !== undefined) {
 		matches = matches.filter(
 			(match) => match.tournament.ground?.surface === surface,
 		)
 	}
 
-	const victories = matches.filter(
-		(match) => match.match_stats.winner === playerData,
-	)
+	const victories = matches.filter((match) => {
+		return match.match_stats.winner === playerData._id
+	})
 
 	const acesArray: number[] = []
 	const dfArray: number[] = []
@@ -127,13 +105,13 @@ const calculateStatsFromMatchArray = (
 
 	matches.forEach((match) => {
 		const { aces, df, result } = match.match_stats
-		const indexOfPlayer = match.home === playerData ? 0 : 1
+		const indexOfPlayer = match.home.api_id === playerData.api_id ? 0 : 1
 
-		if (aces !== undefined) {
+		if (aces?.[indexOfPlayer] !== undefined) {
 			acesArray.push(aces[indexOfPlayer])
 		}
 
-		if (df !== undefined) {
+		if (df?.[indexOfPlayer] !== undefined) {
 			dfArray.push(df[indexOfPlayer])
 		}
 
@@ -147,25 +125,61 @@ const calculateStatsFromMatchArray = (
 				(set) => set[0] <= 7 && set[1] <= 7,
 			)
 
-			notSuperTieBreaksSets.forEach((set) => gamesArray.push(set[0] + set[1]))
+			const addedGames = notSuperTieBreaksSets.map((set) => {
+				return set[0] + set[1]
+			})
+
+			if (addedGames.length > 0) {
+				gamesArray.push(addedGames.reduce((a, b) => a + b))
+			}
 		}
 	})
 
+	if (acesArray.length === 4) {
+		console.log('array de aces del torneo', acesArray)
+	}
+
 	const acesAvg =
-		acesArray.reduce((accumulator, currentValue) => accumulator + currentValue) /
-		acesArray.length
+		Math.round(
+			(acesArray.reduce(
+				(accumulator, currentValue) => accumulator + currentValue,
+			) /
+				acesArray.length) *
+				10,
+		) / 10
 	const dfAvg =
-		dfArray.reduce((accumulator, currentValue) => accumulator + currentValue) /
-		dfArray.length
+		Math.round(
+			(dfArray.reduce((accumulator, currentValue) => accumulator + currentValue) /
+				dfArray.length) *
+				10,
+		) / 10
 	const gamesAvg =
-		gamesArray.reduce((accumulator, currentValue) => accumulator + currentValue) /
-		gamesArray.length
+		Math.round(
+			(gamesArray.reduce(
+				(accumulator, currentValue) => accumulator + currentValue,
+			) /
+				gamesArray.length) *
+				10,
+		) / 10
 
 	return {
-		victories,
-		acesAvg,
-		dfAvg,
-		gamesAvg,
+		victories: {
+			total: victories,
+			sample: matches,
+			percentage: Math.round((victories.length * 100) / matches.length),
+		},
+		aces: {
+			average: acesAvg,
+			sample: acesArray.length,
+		},
+		df: {
+			average: dfAvg,
+			sample: dfArray.length,
+		},
+		games: {
+			average: gamesAvg,
+			sample: gamesArray.length,
+		},
 	}
 }
 
@@ -195,17 +209,17 @@ const calculateYearAdditionalStats = (
 			vsSimilarRivalSample.push(match)
 		}
 
-		if (playerOdd <= 1.05 && winner !== playerData) {
+		if (playerOdd <= 1.05 && winner !== playerData._id) {
 			redFlag.push(match)
 		}
 
-		if (playerOdd <= 1.2 && winner !== playerData) {
+		if (playerOdd <= 1.2 && winner !== playerData._id) {
 			yellowFlag.push(match)
 		}
 	})
 
 	const vsSimilarRivalsVictories = vsSimilarRivalSample.filter((match) => {
-		return match.match_stats.winner === playerData
+		return match.match_stats.winner === playerData._id
 	})
 
 	return {

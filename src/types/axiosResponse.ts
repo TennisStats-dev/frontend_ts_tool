@@ -26,7 +26,7 @@ export interface IMatchResponse extends IMatch {
 }
 
 export interface IMatchStatsResponse extends IMatchStats {
-	winner: IPlayerResponse | undefined
+	winner: string | undefined
 }
 
 export interface IAxiosResponse<T> {
