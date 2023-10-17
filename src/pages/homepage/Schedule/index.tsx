@@ -20,6 +20,7 @@ import type {
 } from '../../../types/axiosResponse'
 import { msToStringTime } from '../../../utils/msToStringTime'
 import { groupTournamentMatchesByDay } from '../../../services/match/groupTournamentMatchesByDate'
+import { groupScheduleMatchesByCourt } from '../../../services/match/groupScheduleMatchesByCourt'
 
 export const Schedule = (): JSX.Element => {
 	// const [dayToSearch, setDayToSearch] = useState(0)
@@ -41,9 +42,11 @@ export const Schedule = (): JSX.Element => {
 		scheduleData()
 			.then(async (res) => {
 				const sortedByDate = sortScheduleByDate(res)
+				const groupedByCourt = groupScheduleMatchesByCourt(sortedByDate)
+				console.log(groupedByCourt)
 				const groupedByTournament = groupMatchesByTournament(sortedByDate)
 				const groupedTournamentMatchesByDay = groupTournamentMatchesByDay(groupedByTournament)
-				console.log(groupedTournamentMatchesByDay)
+				// console.log(groupedTournamentMatchesByDay)
 				const groupedByCircuit = groupTournamentsByCircuit(groupedTournamentMatchesByDay)
 
 				setSchedule(groupedByCircuit)

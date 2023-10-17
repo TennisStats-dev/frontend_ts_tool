@@ -5,6 +5,12 @@ export interface IDateRange {
 	to: Date
 }
 
+export interface IMatchesGroupedByCourt {
+	courtId: number
+	courtName: string
+	groupedMatches: Array<IPreMatchResponse | IMatchResponse>
+}
+
 export interface IMatchesGroupedByTournament {
 	id: number
 	name: string
