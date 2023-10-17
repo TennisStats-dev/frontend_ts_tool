@@ -11,6 +11,15 @@ export interface IMatchesGroupedByTournament {
 	matches: Array<IPreMatchResponse | IMatchResponse>
 }
 
+export interface IMatchesGroupedByTournamentAndDay {
+	id: number
+	name: string
+	groupedMatches: Array<{
+		day: number
+		matches: Array<IPreMatchResponse | IMatchResponse>
+	}>
+}
+
 export interface ITournamentsGroupedByCircuit {
 	name: string
 	tournaments: IMatchesGroupedByTournament[]

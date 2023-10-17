@@ -10,10 +10,9 @@ import { UpcomingMatchStatsCard } from '../UpcomingMatchStatsCard'
 
 interface Props {
 	match: IMatchResponse | IPreMatchResponse
-	index: number
 }
 
-export const UpcominMatchCard = ({ match, index }: Props): JSX.Element => {
+export const UpcominMatchCard = ({ match }: Props): JSX.Element => {
 	const [displayStats, setDisplayStats] = useState(false)
 	const countryHome = match.home.cc?.toUpperCase()
 	const countryAway = match.away.cc?.toUpperCase()

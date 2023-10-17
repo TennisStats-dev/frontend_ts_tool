@@ -1,10 +1,16 @@
-import type { IMatch, IPreMatch } from '../../types/databaseTypes'
+import type {
+	IMatchResponse,
+	IPreMatchResponse,
+} from '../../types/axiosResponse'
 import type { IMatchesGroupedByTournament } from '../../types/types'
 
 export const groupMatchesByTournament = (
-	arrayInput: Array<IPreMatch | IMatch>,
+	arrayInput: Array<IPreMatchResponse | IMatchResponse>,
 ): IMatchesGroupedByTournament[] => {
-	const groupedSchedule = new Map<number, Array<IPreMatch | IMatch>>()
+	const groupedSchedule = new Map<
+		number,
+		Array<IPreMatchResponse | IMatchResponse>
+	>()
 
 	for (const match of arrayInput) {
 		if (!groupedSchedule.has(match.tournament.api_id)) {

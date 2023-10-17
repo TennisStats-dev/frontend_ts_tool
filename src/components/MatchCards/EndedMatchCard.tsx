@@ -8,10 +8,9 @@ import { getMatchResult } from '../../services/match/getMatchResult'
 
 interface Props {
 	match: IMatchResponse
-	index: number
 }
 
-export const EndedMatchCard = ({ match, index }: Props): JSX.Element => {
+export const EndedMatchCard = ({ match }: Props): JSX.Element => {
 	const [displayStats, setDisplayStats] = useState(false)
 	const countryHome = match.home.cc?.toUpperCase()
 	const countryAway = match.away.cc?.toUpperCase()

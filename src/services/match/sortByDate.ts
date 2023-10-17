@@ -1,9 +1,11 @@
-import type { IMatchResponse, IPreMatchResponse } from '../../types/axiosResponse'
-import type { IPreMatch } from '../../types/databaseTypes'
+import type {
+	IMatchResponse,
+	IPreMatchResponse,
+} from '../../types/axiosResponse'
 
 export const sortScheduleByDate = (
 	matches: Array<IMatchResponse | IPreMatchResponse> | IMatchResponse[],
-): Array<IMatchResponse | IPreMatch> | IMatchResponse[] => {
+): Array<IMatchResponse | IPreMatchResponse> | IMatchResponse[] => {
 	const sortedMatches = matches.sort((a, b) => {
 		if (a.est_time > b.est_time) {
 			return 1

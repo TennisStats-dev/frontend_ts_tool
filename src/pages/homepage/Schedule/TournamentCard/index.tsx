@@ -107,14 +107,9 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 									<EndedMatchCard
 										key={match.api_id}
 										match={match as IMatchResponse}
-										index={index}
 									></EndedMatchCard>
 								) : (
-									<UpcominMatchCard
-										key={match.api_id}
-										match={match}
-										index={index}
-									></UpcominMatchCard>
+									<UpcominMatchCard key={match.api_id} match={match}></UpcominMatchCard>
 								)}
 							</li>
 						)

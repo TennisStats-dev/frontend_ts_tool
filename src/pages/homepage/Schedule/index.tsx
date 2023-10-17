@@ -1,6 +1,6 @@
 import { api } from '../../../API'
 import { useEffect, useState } from 'react'
-import { groupMatchesByTournament } from '../../../services/match/groupMatchesByTorunament'
+import { groupMatchesByTournament } from '../../../services/match/groupMatchesByTournament'
 import type { ITournamentsGroupedByCircuit } from '../../../types/types'
 import atp_black from '../../../assets/atp_black.png'
 import atp_blue from '../../../assets/atp_blue.jpg'
@@ -19,6 +19,7 @@ import type {
 	IPreMatchResponse,
 } from '../../../types/axiosResponse'
 import { msToStringTime } from '../../../utils/msToStringTime'
+import { groupTournamentMatchesByDay } from '../../../services/match/groupTournamentMatchesByDate'
 
 export const Schedule = (): JSX.Element => {
 	// const [dayToSearch, setDayToSearch] = useState(0)
@@ -41,6 +42,8 @@ export const Schedule = (): JSX.Element => {
 			.then(async (res) => {
 				const sortedByDate = sortScheduleByDate(res)
 				const groupedByTournament = groupMatchesByTournament(sortedByDate)
+				const groupedTournamentMatchesByDay = groupTournamentMatchesByDay(groupedByTournament)
+				console.log(groupedTournamentMatchesByDay)
 				const groupedByCircuit = groupTournamentsByCircuit(groupedByTournament)
 
 				setSchedule(groupedByCircuit)
