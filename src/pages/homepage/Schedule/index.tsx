@@ -13,24 +13,45 @@ import wta from '../../../assets/wta.jpg'
 import { groupTournamentsByCircuit } from '../../../services/match/groupTournamentsByCircuit'
 import { CircuitCard } from './CircuitCard'
 import { sortScheduleByDate } from '../../../services/match/sortByDate'
+// import { getMatchStats } from '../../../services/stats/getMatchStats'
+import type {
+	IMatchResponse,
+	IPreMatchResponse,
+} from '../../../types/axiosResponse'
+import { msToStringTime } from '../../../utils/msToStringTime'
 
 export const Schedule = (): JSX.Element => {
 	// const [dayToSearch, setDayToSearch] = useState(0)
 	const [schedule, setSchedule] = useState<ITournamentsGroupedByCircuit[]>()
+	// const { setMatchesStats } = useContext(StatsContext)
 
 	useEffect(() => {
-		const scheduleData = async (): Promise<ITournamentsGroupedByCircuit[]> => {
+		const scheduleData = async (): Promise<
+			Array<IMatchResponse | IPreMatchResponse> | IMatchResponse[]
+		> => {
+			const startTime = new Date()
 			const matches = await api.services.getDateSchedule(0)
+			const endTime = new Date()
+			console.log(msToStringTime(endTime.getTime() - startTime.getTime()))
 
-			const sortedByDate = sortScheduleByDate(matches)
-			const groupedByTournament = groupMatchesByTournament(sortedByDate)
-			const groupedByCircuit = groupTournamentsByCircuit(groupedByTournament)
-			return groupedByCircuit
+			return matches
 		}
 
 		scheduleData()
-			.then((res) => {
-				setSchedule(res)
+			.then(async (res) => {
+				const sortedByDate = sortScheduleByDate(res)
+				const groupedByTournament = groupMatchesByTournament(sortedByDate)
+				const groupedByCircuit = groupTournamentsByCircuit(groupedByTournament)
+
+				setSchedule(groupedByCircuit)
+
+				// const getMatchStatsPromises = res.map(async (match) => {
+				// 	return await getMatchStats(match)
+				// })
+
+				// const resolvedPromises = await Promise.all(getMatchStatsPromises)
+
+				// setMatchesStats(resolvedPromises)
 			})
 			.catch((err) => {
 				console.log(err)

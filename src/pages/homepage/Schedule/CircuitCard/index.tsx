@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import type { ITournamentsGroupedByCircuit } from '../../../types/types'
-import { TournamentCard } from './TournamentCard'
+import type { ITournamentsGroupedByCircuit } from '../../../../types/types'
+import { TournamentCard } from '../TournamentCard'
 
 interface Props {
 	circuit: ITournamentsGroupedByCircuit
@@ -26,7 +26,9 @@ export const CircuitCard = ({ circuit }: Props): JSX.Element => {
 					>
 						<svg
 							data-accordion-icon
-							className={`w-3 h-3 shrink-0 ${displayTournaments ? 'rotate-180' : null}`}
+							className={`w-3 h-3 shrink-0 ${
+								displayTournaments ? 'rotate-180' : null
+							}`}
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -45,10 +47,9 @@ export const CircuitCard = ({ circuit }: Props): JSX.Element => {
 				<ul className={`${!displayTournaments ? 'hidden' : null}`}>
 					{circuit.tournaments.map((tournament) => {
 						return (
-							<TournamentCard
-								key={tournament.id}
-								tournament={tournament}
-							></TournamentCard>
+							<li key={tournament.id} className="mt-2">
+								<TournamentCard tournament={tournament}></TournamentCard>
+							</li>
 						)
 					})}
 				</ul>

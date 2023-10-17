@@ -16,7 +16,10 @@ export interface ITournamentsGroupedByCircuit {
 	tournaments: IMatchesGroupedByTournament[]
 }
 
+export type IMatchesStats = IMatchPlayersStats[]
+
 export interface IMatchPlayersStats {
+	matchId: number
 	home: IPlayerStats
 	away: IPlayerStats
 	h2h: IMatchResponse[]
@@ -24,6 +27,7 @@ export interface IMatchPlayersStats {
 }
 
 export interface IPlayerStats {
+	totalSample: IMatchResponse[]
 	tournamentStats: Pick<IPeriodStats, 'all'>
 	yearStats: IPeriodStats
 	careerStats: IPeriodStats
@@ -40,26 +44,26 @@ export interface IPlayerStats {
 }
 
 export interface IPeriodStats {
-	all: IStats
-	onSurface: IStats
+	all: IStats | 0
+	onSurface: IStats | 0
 }
 
 export interface IStats {
 	victories: {
 		total: IMatchResponse[]
 		sample: IMatchResponse[]
-		percentage: number
+		percentage: number | '-'
 	}
 	aces: {
-		average: number
-		sample: number
+		average: number | '-'
+		sample: number | '-'
 	}
 	df: {
-		average: number
-		sample: number
+		average: number | '-'
+		sample: number | '-'
 	}
 	games: {
-		average: number
-		sample: number
+		average: number | '-'
+		sample: number | '-'
 	}
 }

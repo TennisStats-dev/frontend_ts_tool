@@ -6,12 +6,39 @@ import type {
 	IPreMatchResponse,
 } from '../../types/axiosResponse'
 import type { Surface } from '../../types/databaseTypes'
-import type { IPlayerStats, IStats } from '../../types/types'
+import type {
+	IMatchPlayersStats,
+	IPeriodStats,
+	IPlayerStats,
+} from '../../types/types'
 import { getDateBeforeXDays, getDateRange } from '../../utils/getDates'
 import { msToStringTime } from '../../utils/msToStringTime'
 import { sortEndedMatchesByDate } from '../match/sortByDate'
 
-export const getPlayerStats = async (
+export const getMatchStats = async (
+	match: IMatchResponse | IPreMatchResponse,
+): Promise<IMatchPlayersStats> => {
+	// const promises = [getPlayerStats(match, match.home), getPlayerStats(match, match.away)]
+	const res = await Promise.all([
+		getPlayerStats(match, match.home),
+		getPlayerStats(match, match.away),
+	])
+
+	const home = res[0]
+	const away = res[1]
+	const h2h = getH2H(home.totalSample, match.away)
+	const isFixed = getIsFixed(match)
+
+	return {
+		matchId: match.api_id,
+		home,
+		away,
+		h2h,
+		isFixed,
+	}
+}
+
+const getPlayerStats = async (
 	matchData: IMatchResponse | IPreMatchResponse,
 	playerData: IPlayerResponse,
 ): Promise<IPlayerStats> => {
@@ -38,7 +65,8 @@ export const getPlayerStats = async (
 
 		return (
 			match.tournament.api_id === matchData.tournament.api_id &&
-			new Date(match.est_time) >= startingPeriod
+			new Date(match.est_time) >= startingPeriod &&
+			new Date(match.est_time) <= new Date(matchData.est_time)
 		)
 	})
 
@@ -63,6 +91,7 @@ export const getPlayerStats = async (
 	}
 
 	return {
+		totalSample: allMatches,
 		tournamentStats: {
 			all: calculateStatsFromMatchArray(tournamentMatches, playerData),
 		},
@@ -92,18 +121,25 @@ const calculateStatsFromMatchArray = (
 	matches: IMatchResponse[],
 	playerData: IPlayerResponse,
 	surface?: Surface,
-): IStats => {
+): IPeriodStats['all'] => {
 	if (surface !== undefined) {
 		matches = matches.filter(
 			(match) => match.tournament.ground?.surface === surface,
 		)
 	}
 
+	if (matches.length === 0) {
+		return 0
+	}
+
 	const victories = matches.filter((match) => {
 		return match.match_stats.winner === playerData._id
 	})
 
-    const victoriesPercentage = victories.length > 0 ? Math.round((victories.length * 100) / matches.length) : 0
+	const victoriesPercentage =
+		victories.length > 0
+			? Math.round((victories.length * 100) / matches.length)
+			: 0
 
 	const acesArray: number[] = []
 	const dfArray: number[] = []
@@ -262,16 +298,18 @@ const calculateTournamentAdditionalStats = (
 	return greenFlag
 }
 
-export const getH2H = (
+const getH2H = (
 	playerMatches: IMatchResponse[],
 	rivalPlayer: IPlayerResponse,
 ): IMatchResponse[] => {
-	return playerMatches.filter(
-		(match) => match.home === rivalPlayer || match.away === rivalPlayer,
+	const h2hMatches = playerMatches.filter(
+		(match) =>
+			match.home._id === rivalPlayer._id || match.away._id === rivalPlayer._id,
 	)
+	return h2hMatches
 }
 
-export const getIsFixed = (
+const getIsFixed = (
 	match: IPreMatchResponse | IMatchResponse,
 ): boolean | undefined => {
 	if (

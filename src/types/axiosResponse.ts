@@ -1,4 +1,4 @@
-import type { IMatch, IMatchStats, IPlayer, IPreMatch } from './databaseTypes'
+import type { IMatch, IPlayer, IPreMatch } from './databaseTypes'
 
 export interface IPlayerResponse extends IPlayer {
 	_id: string
@@ -22,12 +22,11 @@ export interface IMatchResponse extends IMatch {
 	_id: string
 	home: IPlayerResponse | IDoublesPlayerResponse
 	away: IPlayerResponse | IDoublesPlayerResponse
-	match_stats: IMatchStatsResponse
 }
 
-export interface IMatchStatsResponse extends IMatchStats {
-	winner: string | undefined
-}
+// export interface IMatchStatsResponse extends IMatchStats {
+// 	winner: string | undefined
+// }
 
 export interface IAxiosResponse<T> {
 	result: T

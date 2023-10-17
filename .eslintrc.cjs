@@ -25,5 +25,6 @@ module.exports = {
         "comma-dangle": "off",
         "@typescript-eslint/comma-dangle": "off",
         "multiline-ternary": "off",
+        "no-mixed-spaces-and-tabs": "off"
     }
 }
