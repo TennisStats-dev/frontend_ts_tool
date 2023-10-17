@@ -15,14 +15,14 @@ export interface IMatchesGroupedByTournamentAndDay {
 	id: number
 	name: string
 	groupedMatches: Array<{
-		day: number
+		day: string
 		matches: Array<IPreMatchResponse | IMatchResponse>
 	}>
 }
 
 export interface ITournamentsGroupedByCircuit {
 	name: string
-	tournaments: IMatchesGroupedByTournament[]
+	tournaments: IMatchesGroupedByTournamentAndDay[]
 }
 
 export type IMatchesStats = IMatchPlayersStats[]

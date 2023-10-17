@@ -9,21 +9,24 @@ import {
 	MenType,
 	tournamentTypeImages,
 } from '../../../../constants/tournamentType'
-import type { IMatchesGroupedByTournament } from '../../../../types/types'
+import type { IMatchesGroupedByTournamentAndDay } from '../../../../types/types'
 import { UpcominMatchCard } from '../../../../components/MatchCards/UpcomingMatchCard'
 import { EndedMatchCard } from '../../../../components/MatchCards/EndedMatchCard'
 import type { IMatchResponse } from '../../../../types/axiosResponse'
 
 interface Props {
-	tournament: IMatchesGroupedByTournament
+	tournament: IMatchesGroupedByTournamentAndDay
 }
 
 export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 	const [displayMatches, setDisplayMatches] = useState(true)
 
-	const country = tournament.matches[0].tournament.cc?.toUpperCase()
-	const surface = tournament.matches[0].tournament.ground?.surface
-	const location = tournament.matches[0].tournament.ground?.location
+	const country =
+		tournament.groupedMatches[0].matches[0].tournament.cc?.toUpperCase()
+	const surface =
+		tournament.groupedMatches[0].matches[0].tournament.ground?.surface
+	const location =
+		tournament.groupedMatches[0].matches[0].tournament.ground?.location
 
 	return (
 		<article>
@@ -33,7 +36,7 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 				}`}
 			>
 				<div className="flex gap-2 items-center px-3">
-					{tournament.matches[0].tournament.type === 'M' ? (
+					{tournament.groupedMatches[0].matches[0].tournament.type === 'M' ? (
 						<MenType></MenType>
 					) : (
 						<MenDoubleType></MenDoubleType>
@@ -41,7 +44,11 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 
 					<img
 						className="h-4"
-						src={tournamentTypeImages[tournament.matches[0].tournament.type]}
+						src={
+							tournamentTypeImages[
+								tournament.groupedMatches[0].matches[0].tournament.type
+							]
+						}
 					></img>
 					{country !== undefined && (
 						<img
@@ -50,7 +57,7 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 							alt={`Flag from ${flagsObject[country]}`}
 						></img>
 					)}
-					<p>{tournament.matches[0].tournament.name}</p>
+					<p>{tournament.groupedMatches[0].matches[0].tournament.name}</p>
 				</div>
 				<div className="flex gap-1">
 					{surface !== undefined && location !== undefined && (
@@ -95,22 +102,43 @@ export const TournamentCard = ({ tournament }: Props): JSX.Element => {
 						!displayMatches ? 'hidden' : 'border-x-2 border-b-2 rounded-b'
 					}`}
 				>
-					{tournament.matches.map((match, index) => {
+					{tournament.groupedMatches.map((tournamentDay) => {
 						return (
 							<li
-								key={match.api_id}
-								className={`${
-									index !== 0 ? 'border-t-2' : null
-								} border-bg-slate-400 p-2`}
+								key={tournamentDay.day}
+								className={'border-bg-slate-400'}
+								// className={`${
+								// 	index !== 0 ? 'border-t-2' : null
+								// } border-bg-slate-400 p-2`}
 							>
-								{match.status === 3 ? (
-									<EndedMatchCard
-										key={match.api_id}
-										match={match as IMatchResponse}
-									></EndedMatchCard>
-								) : (
-									<UpcominMatchCard key={match.api_id} match={match}></UpcominMatchCard>
-								)}
+								<h1 className="sticky top-14 border-y-2 px-2 text-center">
+									{tournamentDay.day}
+								</h1>
+								{tournamentDay.matches.map((match, index, array) => {
+									return match.status === 3 ? (
+										<li
+											className={`px-2 ${
+												index !== 0 && index < array.length ? 'border-t' : null
+											}`}
+										>
+											<EndedMatchCard
+												key={match.api_id}
+												match={match as IMatchResponse}
+											></EndedMatchCard>
+										</li>
+									) : (
+										<li
+											className={`px-2 ${
+												index !== 0 && index < array.length ? 'border-t' : null
+											}`}
+										>
+											<UpcominMatchCard
+												key={match.api_id}
+												match={match}
+											></UpcominMatchCard>
+										</li>
+									)
+								})}
 							</li>
 						)
 					})}

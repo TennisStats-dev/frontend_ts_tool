@@ -6,6 +6,7 @@ import type {
 	IMatchesGroupedByTournament,
 	IMatchesGroupedByTournamentAndDay,
 } from '../../types/types'
+import { formatDay } from '../../utils/formatDate'
 
 export const groupTournamentMatchesByDay = (
 	arrayInput: IMatchesGroupedByTournament[],
@@ -14,12 +15,12 @@ export const groupTournamentMatchesByDay = (
 
 	arrayInput.forEach((tournament) => {
 		const groupedMatchesByDay = new Map<
-			number,
+			string,
 			Array<IPreMatchResponse | IMatchResponse>
 		>()
 
 		for (const match of tournament.matches) {
-			const day = new Date(match.est_time).getDate()
+			const day = formatDay(new Date(match.est_time))
 
 			if (!groupedMatchesByDay.has(day)) {
 				groupedMatchesByDay.set(day, [])

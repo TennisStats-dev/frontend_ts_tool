@@ -1,5 +1,5 @@
 import type {
-	IMatchesGroupedByTournament,
+	IMatchesGroupedByTournamentAndDay,
 	ITournamentsGroupedByCircuit,
 } from '../../types/types'
 
@@ -16,12 +16,15 @@ const circuitsOrder = [
 ]
 
 export const groupTournamentsByCircuit = (
-	arrayInput: IMatchesGroupedByTournament[],
+	arrayInput: IMatchesGroupedByTournamentAndDay[],
 ): ITournamentsGroupedByCircuit[] => {
-	const groupedByCircuit = new Map<string, IMatchesGroupedByTournament[]>()
+	const groupedByCircuit = new Map<
+		string,
+		IMatchesGroupedByTournamentAndDay[]
+	>()
 
 	for (const tournament of arrayInput) {
-		const tournamentCircuit = tournament.matches[0].tournament.circuit
+		const tournamentCircuit = tournament.groupedMatches[0].matches[0].tournament.circuit
 
 		if (tournamentCircuit !== undefined) {
 			if (!groupedByCircuit.has(tournamentCircuit)) {

@@ -44,7 +44,7 @@ export const Schedule = (): JSX.Element => {
 				const groupedByTournament = groupMatchesByTournament(sortedByDate)
 				const groupedTournamentMatchesByDay = groupTournamentMatchesByDay(groupedByTournament)
 				console.log(groupedTournamentMatchesByDay)
-				const groupedByCircuit = groupTournamentsByCircuit(groupedByTournament)
+				const groupedByCircuit = groupTournamentsByCircuit(groupedTournamentMatchesByDay)
 
 				setSchedule(groupedByCircuit)
 

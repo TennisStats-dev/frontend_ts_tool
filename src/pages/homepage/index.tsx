@@ -1,8 +1,10 @@
 import { Header } from '../../components/Header'
 import { MyStatsContextProvider } from '../../contexts/StatsContext'
+import { formatDay } from '../../utils/formatDate'
 import { Schedule } from './Schedule'
 
 export const HomePage = (): JSX.Element => {
+	console.log(formatDay(new Date()))
 	return (
 		<>
 			<Header />

@@ -4,9 +4,9 @@ import type {
 	IMatchResponse,
 	IPreMatchResponse,
 } from '../../types/axiosResponse'
-import { formatDate } from '../../utils/formatDate'
 import { flagsObject } from '../../constants/countries'
 import { UpcomingMatchStatsCard } from '../UpcomingMatchStatsCard'
+import { formatTime } from '../../utils/formatDate'
 
 interface Props {
 	match: IMatchResponse | IPreMatchResponse
@@ -17,7 +17,7 @@ export const UpcominMatchCard = ({ match }: Props): JSX.Element => {
 	const countryHome = match.home.cc?.toUpperCase()
 	const countryAway = match.away.cc?.toUpperCase()
 
-	const date = formatDate(new Date(match.est_time))
+	const date = formatTime(new Date(match.est_time))
 
 	return (
 		<>

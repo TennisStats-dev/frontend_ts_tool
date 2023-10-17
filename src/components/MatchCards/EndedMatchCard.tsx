@@ -23,7 +23,7 @@ export const EndedMatchCard = ({ match }: Props): JSX.Element => {
 		<>
 			<div className="grid grid-cols-6">
 				<div>
-					<p>FIRST: {match.pre_odds?.first.win[0]}</p>
+					<p>{match.pre_odds?.first.win[0]}</p>
 				</div>
 				<div className="col-start-2 col-span-4 grid grid-cols-3">
 					<div className="flex gap-1 justify-self-end items-center">
@@ -60,7 +60,7 @@ export const EndedMatchCard = ({ match }: Props): JSX.Element => {
 					</div>
 				</div>
 				<div className="justify-self-end pr-4 self-center">
-					<p>FIRST: {match.pre_odds?.first.win[1]}</p>
+					<p>{match.pre_odds?.first.win[1]}</p>
 					<button
 						className="p-2 hover:bg-primary-100 rounded-full"
 						onClick={() => {
