@@ -43,7 +43,7 @@ const getPlayerStats = async (
 	playerData: IPlayerResponse,
 ): Promise<IPlayerStats> => {
 	const startTime = new Date()
-	const allMatches = await api.services.getAllPlayerMatches(playerData.api_id)
+	const allMatches = await api.services.getAllPlayerMatches(playerData._id)
 	const endTime = new Date()
 	console.log(msToStringTime(endTime.getTime() - startTime.getTime()))
 

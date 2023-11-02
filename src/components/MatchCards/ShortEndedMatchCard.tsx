@@ -22,8 +22,12 @@ export const ShortEndedMatchCard = ({
 	const [displayStats, setDisplayStats] = useState(false)
 	const countryHome = match.home.cc?.toUpperCase()
 	const countryAway = match.away.cc?.toUpperCase()
-	let reverse = false
+	const reverse = match.home.api_id !== involvedPlayerApiId
 	let result = getMatchResult(match.match_stats.result)
+
+	if (match.api_id === 7352939) {
+		console.log(reverse)
+	}
 
 	const rivalData:
 		| Pick<IPlayerResponse, 'name' | 'cc'>
@@ -38,10 +42,6 @@ export const ShortEndedMatchCard = ({
 					cc: countryHome,
 			  }
 
-	if (match.home.api_id !== involvedPlayerApiId) {
-		reverse = true
-	}
-
 	if (typeof result !== 'string' && reverse) {
 		result = result.map((set) => set.split('-').reverse().join('-'))
 	}
@@ -49,7 +49,7 @@ export const ShortEndedMatchCard = ({
 	// const odds = match.pre_odds?.first.win
 
 	const odds = reverse
-		? match.pre_odds?.first.win.reverse()
+		? match.pre_odds?.first.win.slice().reverse()
 		: match.pre_odds?.first.win
 
 	// const date = formatDate(new Date(match.est_time))
@@ -87,7 +87,6 @@ export const ShortEndedMatchCard = ({
 							</div>
 						)}
 					</div>
-					d
 				</div>
 				<div className="justify-self-end pr-4 self-center">
 					{odds !== undefined && <p>{match.pre_odds?.first.win[1]}</p>}

@@ -64,14 +64,14 @@ const getPeriodPlayerMatches = async (
 }
 
 const getAllPlayerMatches = async (
-	playerApiId: number,
+	playerId: string,
 ): Promise<IMatchResponse[]> => {
 	try {
 		const response = await axios.get<IAxiosResponse<IMatchResponse[]>>(
 			'http://localhost:5000/player-stats',
 			{
 				params: {
-					playerApiId,
+					playerId,
 				},
 			},
 		)

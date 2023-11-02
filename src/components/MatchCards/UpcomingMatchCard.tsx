@@ -22,6 +22,9 @@ export const UpcominMatchCard = ({ match }: Props): JSX.Element => {
 	return (
 		<>
 			<div className="grid grid-cols-6">
+				<div>
+					<p>{match.pre_odds?.last.win[0]}</p>
+				</div>
 				<div className="col-start-2 col-span-4 grid grid-cols-3">
 					<div className="flex gap-1 justify-self-end items-center">
 						<p>{match.home.name}</p>
@@ -47,7 +50,7 @@ export const UpcominMatchCard = ({ match }: Props): JSX.Element => {
 						<p>{match.api_id}</p>
 					</div>
 					<div className="flex gap-1 justify-self-start items-center">
-					{countryAway !== undefined ? (
+						{countryAway !== undefined ? (
 							<img
 								className="h-7 w-7"
 								src={flagsObject[countryAway].image}
@@ -66,6 +69,9 @@ export const UpcominMatchCard = ({ match }: Props): JSX.Element => {
 					</div>
 				</div>
 				<div className="justify-self-end pr-4 self-center">
+					<div>
+						<p>{match.pre_odds?.last.win[1]}</p>
+					</div>
 					<button
 						className="p-2 hover:bg-primary-100 rounded-full"
 						onClick={() => {
