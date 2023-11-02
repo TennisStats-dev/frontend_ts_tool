@@ -67,16 +67,6 @@ export const Schedule = (): JSX.Element => {
 	if (schedule !== undefined) {
 		return (
 			<section className="px-4 lg:px-6 py-2.5">
-				<div className="pt-8 bg-slate-400">
-					<img className="h-4" src={atp_black}></img>
-					<img className="h-8" src={atp_blue}></img>
-					<img className="h-8" src={atp_white}></img>
-					<img className="h-6" src={ch_black}></img>
-					<img className="h-8" src={ch_white}></img>
-					<img className="h-6" src={itf}></img>
-					<img className="h-8" src={utr}></img>
-					<img className="h-8" src={wta}></img>
-				</div>
 				<ul className="mx-auto max-w-screen-xl pt-8">
 					{schedule.map((circuit) => {
 						return <CircuitCard key={circuit.name} circuit={circuit}></CircuitCard>
