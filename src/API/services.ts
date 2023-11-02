@@ -5,6 +5,7 @@ import type {
 	IMatchResponse,
 	IPreMatchResponse,
 } from '../types/axiosResponse'
+import { endpointsAPI } from './endpoints'
 
 const getDateSchedule = async (
 	dayToSearch: number,
@@ -14,7 +15,7 @@ const getDateSchedule = async (
 
 		const response = await axios.get<
 			IAxiosResponse<Array<IPreMatchResponse | IMatchResponse>>
-		>('http://localhost:5000/today-schedule', {
+		>(endpointsAPI.getDayScheduleEndpoint(), {
 			params: {
 				dateRange: {
 					from: dateRange.from.toISOString(),
@@ -42,7 +43,7 @@ const getPeriodPlayerMatches = async (
 		const dateRange = getDateRange(date, yearsAgo, monthsAgo)
 
 		const response = await axios.get<IAxiosResponse<IMatchResponse[]>>(
-			'http://localhost:5000/player-stats-range',
+			endpointsAPI.getPlayerStatsByRangeEndpoint(),
 			{
 				params: {
 					dateRange: {
@@ -68,7 +69,7 @@ const getAllPlayerMatches = async (
 ): Promise<IMatchResponse[]> => {
 	try {
 		const response = await axios.get<IAxiosResponse<IMatchResponse[]>>(
-			'http://localhost:5000/player-stats',
+			endpointsAPI.getPlayerStatsEndpoint(),
 			{
 				params: {
 					playerId,
